@@ -10,14 +10,14 @@ function MyMatching(m_prefs, f_prefs)
         k = 1
         while k <= length(m_prefs[j]) && m_matched[j] == -1
             if f_matched[m_prefs[j][k]] == 0
-                if sum(f_prefs[m_prefs[j][k]] .== m_prefs[j][k]) == 1
+                if sum(f_prefs[m_prefs[j][k]] .== j) == 1
                     m_matched[j] = m_prefs[j][k]
-                    f_matched[m_prefs[j][k]] = m_prefs[j][k]
+                    f_matched[m_prefs[j][k]] = j
                 else
                     f_matched[m_prefs[j][k]] = 0
                 end
             else
-                if searchsortedfirst(f_prefs[m_prefs[j][k]], m_prefs[j][k]) < searchsortedfirst(f_prefs[m_prefs[j][k]], f_matched[m_prefs[j][k]])
+                if searchsortedfirst(f_prefs[m_prefs[j][k]], j) < searchsortedfirst(f_prefs[m_prefs[j][k]], f_matched[m_prefs[j][k]])
                     m_matched[j] = m_prefs[j][k]
                     m_matched[f_matched[m_prefs[j][k]]] = -1
                     f_matched[[m_prefs[j][k]]] = j
