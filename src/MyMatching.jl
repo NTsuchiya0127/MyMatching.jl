@@ -1,4 +1,4 @@
-function MyMatching(m_prefs, f_prefs)
+function MyMatching3(m_prefs, f_prefs)
     m = length(m_prefs)
     n = length(f_prefs)
     m_matched = Array{Float64}(m)
@@ -25,7 +25,7 @@ function MyMatching(m_prefs, f_prefs)
                     while !(f_prefs[m_prefs[j][k]][q] == j)
                         q += 1
                     end
-                    while !(f_prefs[m_prefs[j][k]][q] == p)
+                    while !(f_prefs[m_prefs[j][k]][r] == p)
                         r += 1
                     end
                     if q < r
@@ -36,9 +36,9 @@ function MyMatching(m_prefs, f_prefs)
                 end
                 k += 1
             end
+            h += 1
         end
-        h += 1
-    end    
+    end
     for l in 1:m
         if m_matched[l] == -1
             m_matched[l] = 0
