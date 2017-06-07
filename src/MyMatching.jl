@@ -2,8 +2,8 @@ module MyMatching
 function my_deferred_acceptance(m_prefs, f_prefs)
     m = length(m_prefs)
     n = length(f_prefs)
-    m_matched = Array{Int64}(1, m)
-    f_matched = Array{Int64}(1, n)
+    m_matched = Vector{Int64}(m)
+    f_matched = Vector{Int64}(n)
     m_matched[1:end] = 0
     f_matched[1:end] = 0
     h = 1
