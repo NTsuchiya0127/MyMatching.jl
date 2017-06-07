@@ -2,12 +2,12 @@ function MyMatching(m_prefs, f_prefs)
     m = length(m_prefs)
     n = length(f_prefs)
     m_matched = Array{Float64}(m)
+    for i in 1:m
+        m_matched[i] = -1
+    end
+    f_matched = zeros(n)
     h = 1
     while h <= n
-        for i in 1:m
-            m_matched[i] = -1
-        end
-        f_matched = zeros(n)
         for j in 1:m
             k = 1
             while k <= length(m_prefs[j]) && m_matched[j] == -1
