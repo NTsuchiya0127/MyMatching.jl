@@ -1,5 +1,5 @@
 module MyMatching
-function my_matching(m_prefs, f_prefs)
+function my_deferred_acceptance(m_prefs, f_prefs)
     m = length(m_prefs)
     n = length(f_prefs)
     m_matched = Array{Int64}(1, m)
@@ -41,5 +41,5 @@ function my_matching(m_prefs, f_prefs)
     end
     return m_matched, f_matched
 end
-export my_matching
+export my_deferred_acceptance
 end
