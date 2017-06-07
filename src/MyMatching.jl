@@ -18,19 +18,21 @@ function my_deferred_acceptance(m_prefs, f_prefs)
                             f_matched[m_prefs[j][k]] = j
                         end
                     else
-                        p = f_matched[m_prefs[j][k]]
-                        q = 1
-                        r = 1
-                        while !(f_prefs[m_prefs[j][k]][q] == j)
-                            q += 1
-                        end
-                        while !(f_prefs[m_prefs[j][k]][r] == p)
-                            r += 1
-                        end
-                        if q < r
-                            m_matched[p] = 0
-                            m_matched[j] = m_prefs[j][k]
-                            f_matched[[m_prefs[j][k]]] = j
+                        if sum(f_prefs[m_prefs[j][k]] .== j) == 1
+                            p = f_matched[m_prefs[j][k]]
+                            q = 1
+                            r = 1
+                            while !(f_prefs[m_prefs[j][k]][q] == j)
+                                q += 1
+                            end
+                            while !(f_prefs[m_prefs[j][k]][r] == p)
+                              r += 1
+                            end
+                            if q < r
+                                m_matched[p] = 0
+                                m_matched[j] = m_prefs[j][k]
+                                f_matched[[m_prefs[j][k]]] = j
+                            end
                         end
                     end
                 end
