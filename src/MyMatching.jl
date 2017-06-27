@@ -1,47 +1,70 @@
 module MyMatching
-function my_deferred_acceptance(m_prefs, f_prefs)
-    m = length(m_prefs)
-    n = length(f_prefs)
-    m_matched = Vector{Int64}(m)
-    f_matched = Vector{Int64}(n)
-    m_matched[1:end] = 0
-    f_matched[1:end] = 0
+# 多対一のケース
+function my_deferred_acceptance(prop_prefs::Vector{Vector{Int}},
+                    resp_prefs::Vector{Vector{Int}},
+                    caps::Vector{Int})
+    
+    m = length(prop_prefs)
+    L = sum(caps)
+    n = length(caps)
+    prop_matched = Vector{Int64}(m)
+    resp_matched = Vector{Int64}(L)
+    prop_matched[1:end] = 0
+    resp_matched[1:end] = 0
+    indptr = Array{Int}(n+1)
+    indptr[1] = 1
+    for g in 1:n
+        indptr[g+1] = indptr[g] + caps[g]
+    end
+
     h = 1
     while h <= n
         for j in 1:m
             k = 1
-            while k <= length(m_prefs[j])
-                if m_matched[j] == 0
-                    if f_matched[m_prefs[j][k]] == 0
-                        if sum(f_prefs[m_prefs[j][k]] .== j) == 1
-                            m_matched[j] = m_prefs[j][k]
-                            f_matched[m_prefs[j][k]] = j
-                        end
-                    else
-                        if sum(f_prefs[m_prefs[j][k]] .== j) == 1
-                            p = f_matched[m_prefs[j][k]]
-                            q = 1
-                            r = 1
-                            while !(f_prefs[m_prefs[j][k]][q] == j)
-                                q += 1
+            while k <= length(prop_prefs[j])
+                if prop_matched[j] == 0
+                    if j in resp_prefs[prop_prefs[j][k]]
+                        v = resp_matched[indptr[prop_prefs[j][k]]:indptr[prop_prefs[j][k]+1]-1]
+                        if 0 in v
+                            prop_matched[j] = prop_prefs[j][k]
+                            t = 1
+                            while !(v[t] == 0)
+                                t += 1
                             end
-                            while !(f_prefs[m_prefs[j][k]][r] == p)
-                              r += 1
+                            resp_matched[indptr[prop_prefs[j][k]]+t-1] = j
+                        else
+                            s = 1
+                            while findfirst(resp_prefs[prop_prefs[j][k]], v[s]) <= findfirst(resp_prefs[prop_prefs[j][k]], j)
+                                if s <= length(v)
+                                    s += 1
+                                end
+                                if s > length(v)
+                                    break
+                                end
                             end
-                            if q < r
-                                m_matched[p] = 0
-                                m_matched[j] = m_prefs[j][k]
-                                f_matched[[m_prefs[j][k]]] = j
+                            if s <= length(v)
+                                prop_matched[v[s]] = 0
+                                prop_matched[j] = prop_prefs[j][k]
+                                resp_matched[indptr[prop_prefs[j][k]]+s-1] = j
                             end
                         end
                     end
                 end
                 k += 1
             end
-        end 
+        end
         h += 1
-    end
-    return m_matched, f_matched
+    end   
+    
+    return prop_matched, resp_matched, indptr
+end
+
+# 一対一のケース
+function my_deferred_acceptance(prop_prefs::Vector{Vector{Int}},
+                    resp_prefs::Vector{Vector{Int}})
+                    caps = ones(Int, length(resp_prefs))
+    prop_matches, resp_matches, indptr = MyMatching(prop_prefs, resp_prefs, caps)
+    return prop_matches, resp_matches
 end
 export my_deferred_acceptance
 end
