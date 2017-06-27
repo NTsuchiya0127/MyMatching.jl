@@ -63,8 +63,9 @@ end
 function my_deferred_acceptance(prop_prefs::Vector{Vector{Int}},
                     resp_prefs::Vector{Vector{Int}})
                     caps = ones(Int, length(resp_prefs))
-    prop_matches, resp_matches, indptr = MyMatching(prop_prefs, resp_prefs, caps)
+    prop_matched, resp_matched, indptr = MyMatching(prop_prefs, resp_prefs, caps)
     return prop_matched, resp_matched
 end
+
 export my_deferred_acceptance
 end
